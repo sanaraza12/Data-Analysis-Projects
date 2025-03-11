@@ -1,0 +1,102 @@
+---
+title: "Statistical Inference and Regression Analysis"
+author: "Sana Arif Raza"
+date: "2024-12-07"
+output: html_document
+---
+
+##### QUESTION #1: Several neurosurgeons wanted to determine whether a dynamic system (Z-plate) reduced the operative time relative to a static system (ALPS plate). R. Jacobowitz, Ph.D., an Arizona State University professor, along with G. Vishteh, M.D., and other neurosurgeons obtained the data displayed in Table below on operative times, in minutes, for the two systems. Perform the following: a) At the 5% significance level, does the data provide sufficient evidence to conclude that the mean operative time is less with the dynamic system than with the static system? b) Use the sample data in Table to obtain a 90% confidence interval for the difference, μ1 − μ2, between the mean operative times of the dynamic and static systems
+
+```{r}
+# Data for operative times (Dynamic and Static systems)
+dynamic = c(370, 360, 510, 445, 295, 315, 490, 345, 450, 505, 335, 280, 325, 500) 
+static = c(430, 445, 455, 455, 490, 535)
+```
+
+##### (a) Hypothesis Test for Mean Difference
+```{r}
+# Perform a two sample t-test
+t_test_result = t.test(dynamic, static, alternative = "less", conf.level = 0.95, var.equal = TRUE)
+print(t_test_result)
+```
+##### Interpretation: Based on the results of the two sample t-test, the hypotheses were: Null Hypothesis (H0): The mean operative time for the dynamic system is greater than or equal to the mean operative time for the static system. Alternative Hypothesis (H1): The mean operative time for the dynamic system is less than the mean operative time for the static system. The test yielded a t-value of -2.02 and a p-value of 0.029. At the 5% significance level, the p-value is less than the significance threshold, leading to the rejection of the null hypothesis.
+
+##### Thus, we conclude that there is sufficient evidence to suggest that the mean operative time for the dynamic system is significantly less than the mean operative time for the static system. The sample means support this conclusion, with the mean operative time for the dynamic system at 394.64 minutes and that for the static system at 468.33 minutes, further confirming the faster performance of the dynamic system.
+
+##### (b) 90% Confidence Interval for the Mean Difference
+```{r}
+# Confidence interval for the mean difference
+conf_int = t.test(dynamic, static, conf.level = 0.90, var.equal = TRUE)$conf.int
+print(conf_int)
+```
+##### Interpretation: The 90% confidence interval for the difference in mean operative times between the dynamic and static systems is (-136.96, -10.42). This interval indicates that, with 90% confidence, the true mean difference lies within this range. Since the entire interval is negative, it suggests that the mean operative time for the dynamic system is significantly less than that for the static system.
+
+##### QUESTION #2: The second and third columns of the Table below give the ages of 10 randomly selected married couples. Perform the following: a) At the 5% significance level, does the data provide sufficient evidence to conclude that the mean age of married men differs from the mean age of married women? b) Use the age data in the second and third columns of Table to obtain a 95% confidence interval for the difference, μ1 − μ2, between the mean ages of married men and married women.
+
+```{r}
+# Data for ages of married couples
+men = c(59, 21, 33, 78, 70, 33, 68, 32, 54, 52)
+women = c(53, 22, 36, 74, 64, 35, 67, 28, 41, 44)
+```
+
+##### (a) Hypothesis Test for Mean Age Difference
+```{r}
+# Perform a two sided t-test
+t_test_age = t.test(men, women, alternative = "two.sided", conf.level = 0.95, var.equal = TRUE)
+print(t_test_age)
+```
+##### Interpretation: A two-sided t-test was conducted to determine whether there is a significant difference between the mean ages of married men and married women. The null hypothesis (H0) stated that the mean ages are equal, while the alternative hypothesis (H1) claimed that the mean ages are not equal.
+
+##### The test resulted in a t-value of 0.44 and a p-value of 0.67. At the 5% significance level, the p-value is greater than 0.05, indicating that we fail to reject the null hypothesis. Therefore, there is no sufficient evidence to conclude that the mean age of married men differs from that of married women. The sample means were 50 years for married men and 46.4 years for married women.
+
+##### (b) 95% Confidence Interval for the Mean Age Difference
+```{r}
+# Confidence interval for the mean age difference
+conf_int_age = t.test(men, women, conf.level = 0.95, var.equal = TRUE)$conf.int
+print(conf_int_age)
+```
+##### Interpretation: The 95% confidence interval for the difference in mean ages between married men and married women is (-13.69, 20.89). This interval indicates that, with 95% confidence, the true difference in mean ages lies within this range. Since the interval includes 0, it suggests that there is no significant difference between the mean ages of married men and married women.
+
+##### QUESTION #3: Use the data in Table below to: a) Obtain a scatterplot for the age and price. b) Determine the regression equation and coefficient of determination for the age and price. c) At the 5% significance level, does the data provide sufficient evidence to conclude that age is useful as a (linear) predictor of price for Orions? d) To determine a 95% confidence interval for the slope of the population regression line that relates price to age for Orions.
+
+```{r}
+# Data for age and price
+age = c(5, 4, 6, 5, 5, 5, 6, 6, 2, 7, 7)
+price = c(85, 103, 70, 82, 89, 98, 66, 95, 169, 70, 48)
+```
+
+##### (a) Scatterplot
+```{r}
+# Scatterplot for age vs. price
+plot(age, price, main = "Scatterplot of Age vs. Price", xlab = "Age", ylab = "Price", pch = 19, col = "blue")
+```   
+
+##### Interpretation: The scatterplot illustrates the relationship between the age and price of Orions. It suggests a negative correlation, where the price of the Orion tends to decrease as its age increases. Most of the data points for older Orions (ages 5 to 7) are clustered towards lower price values, indicating that older Orions are typically priced lower. However, there is a noticeable outlier at the lower end of the age range (around age 2) with a significantly higher price.
+
+##### (b) Regression Equation and Coefficient of Determination
+```{r}
+# Linear regression model
+reg_model = lm(price ~ age)
+summary(reg_model)
+
+# Coefficient of determination (R-squared)
+r_squared = summary(reg_model)$r.squared
+print(r_squared)
+```
+##### Interpretation: The linear regression analysis shows the following regression equation: Price = 195.47 - 20.26 * Age. This equation suggests that, on average, the price of the Orion decreases by 20.26 units for each additional year of age. The coefficient of determination (R-squared) is 0.8534, indicating that approximately 85.34% of the variability in the Orion prices can be explained by the Orion's age. This suggests that the age of the Orion is a significant predictor of its price.
+
+##### (c) Hypothesis Test for Predictive Utility
+```{r}
+# Check p-value for the slope in the regression summary
+p_value = summary(reg_model)$coefficients[2, 4]
+print(p_value)
+```
+##### Interpretation: The p-value for the slope coefficient (age) in the regression model is 4.88e-05, which is significantly less than the significance level of 0.05. This indicates that the relationship between age and price is statistically significant. In other words, age is a meaningful predictor of Orion price, and we can confidently reject the null hypothesis that there is no relationship between these two variables.
+
+##### (d) 95% Confidence Interval for the Slope
+```{r}
+# Confidence interval for the slope
+conf_int_slope = confint(reg_model, level = 0.95)
+print(conf_int_slope)
+```
+##### Interpretation: The 95% confidence interval for the slope of the regression line, which represents the relationship between age and price, is from -26.59 to -13.93. This means that for each unit increase in age, the price of the Orion is expected to decrease between 13.93 and 26.59 units, with 95% confidence. The negative value of the slope further supports the finding that age is negatively associated with the price of the Orion.
